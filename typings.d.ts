@@ -10,6 +10,6 @@ export interface Tweet extends TweetBody {
 export type TweetBody = {
     text: string,
     username: string
-    profuleImg: string,
+    profileImage: string,
     image?: string
 }

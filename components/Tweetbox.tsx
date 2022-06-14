@@ -8,8 +8,15 @@ import {
 import { useSession } from 'next-auth/react';
 import { format } from 'path';
 import { useRef, useState } from 'react'
+import toast from 'react-hot-toast';
+import { Tweet, TweetBody } from '../typings';
+import { fetchTweets } from '../utils/fetchTweets';
 
-const Tweetbox = () => {
+interface Props {
+    setTweets: React.Dispatch<React.SetStateAction<Tweet[]>>
+}
+
+const Tweetbox = ({ setTweets }: Props) => {
     const [input, setInput] = useState<string>('');
     const [image, setImage] = useState<string>('');
     const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
@@ -27,6 +34,43 @@ const Tweetbox = () => {
         setImageUrlBoxIsOpen(false);
     }
 
+    const postTweet = async () => {
+        const tweetBody: TweetBody = {
+            text: input,
+            username: session?.user?.name || 'Unknown User',
+            profileImage: session?.user?.image || 'https://picsum.photos/200/200',
+            image: image
+        }
+
+        const result = await fetch(`/api/addTweet`, {
+            body: JSON.stringify(tweetBody),
+            method: 'POST'
+        })
+
+        const json = await result.json()
+        console.log(json);
+
+        const newTweets = await fetchTweets();
+
+        setTweets(newTweets);
+
+        toast('Tweet Posted', {
+            icon: '🚀'
+        })
+
+        return json;
+    }
+
+    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+
+        postTweet();
+
+        setInput('');
+        setImage('');
+        setImageUrlBoxIsOpen(false);
+    }
+    
     return (
         <div className='flex space-x-2 p-5'>
             <img className="h-14 w-14 object-cover rounded-full mt-4" src={session?.user?.image || 'https://picsum.photos/seed/200/200'} alt="profile-pic" />
@@ -43,7 +87,7 @@ const Tweetbox = () => {
                             <CalendarIcon className='h-5 w-5' />
                             <LocationMarkerIcon className='h-5 w-5' />
                         </div>
-                        <button disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Tweet</button>
+                        <button onClick={handleSubmit} disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Tweet</button>
                     </div>
 
                     {imageUrlBoxIsOpen && (

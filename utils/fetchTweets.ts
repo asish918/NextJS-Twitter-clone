@@ -4,5 +4,6 @@ export const fetchTweets = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getTweets`)
 
     const tweets: Tweet[] =  await res.json();
-    return tweets
+    console.log(tweets);
+    return tweets.reverse();
 }

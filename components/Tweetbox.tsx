@@ -48,7 +48,6 @@ const Tweetbox = ({ setTweets }: Props) => {
         })
 
         const json = await result.json()
-        console.log(json);
 
         const newTweets = await fetchTweets();
 

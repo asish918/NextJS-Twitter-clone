@@ -14,7 +14,7 @@ interface Props {
 const Feed = ({ tweets: TweetsProp }: Props) => {
     const [tweets, setTweets] = useState<Tweet[]>(TweetsProp);
     
-    const handleRefresh =async () => {
+    const handleRefresh = async () => {
         const refreshToast = toast.loading("Refreshing....")
         
         const tweets = await fetchTweets();

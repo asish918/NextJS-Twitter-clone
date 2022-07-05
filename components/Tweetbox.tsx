@@ -38,7 +38,7 @@ const Tweetbox = ({ setTweets }: Props) => {
         const tweetBody: TweetBody = {
             text: input,
             username: session?.user?.name || 'Unknown User',
-            profileImage: session?.user?.image || 'https://picsum.photos/200/200',
+            profileImage: session?.user?.image || 'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg',
             image: image
         }
 
@@ -72,7 +72,7 @@ const Tweetbox = ({ setTweets }: Props) => {
     
     return (
         <div className='flex space-x-2 p-5'>
-            <img className="h-14 w-14 object-cover rounded-full mt-4" src={session?.user?.image || 'https://picsum.photos/seed/200/200'} alt="profile-pic" />
+            <img className="h-14 w-14 object-contain rounded-full mt-4" src={session?.user?.image || 'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg'} alt="profile-pic" />
 
             <div className='flex flex-1 items-center pl-2'>
                 <form className='flex flex-1 flex-col'>

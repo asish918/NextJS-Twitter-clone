@@ -8,16 +8,18 @@ import {
     UserIcon,
     HomeIcon
  } from '@heroicons/react/outline'
+import assets from '../assets/assets'
 import SidebarRow from './SidebarRow';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 const Sidebar = () => {
 
     const { data: session } = useSession();
+    console.log(assets.logo)
     
     return (
         <div className='flex flex-col col-span-2 items-center px-4 md:items-start'>
-            <img className='h-10 w-10 m-3' src='https:links.papareact.com/drq' alt='twitter-logo' />
+            <img className='h-10 w-10 m-3' src={assets.logo.src} alt='twitter-logo' />
             <SidebarRow Icon={HomeIcon} title='Home'/>
             <SidebarRow Icon={HashtagIcon} title='Explore'/>
             <SidebarRow Icon={BellIcon} title='Notifications'/>

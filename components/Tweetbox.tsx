@@ -5,7 +5,7 @@ import {
     PhotographIcon,
     SearchCircleIcon
 } from '@heroicons/react/outline'
-// import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { format } from 'path';
 import { useRef, useState } from 'react'
 import toast from 'react-hot-toast';
@@ -22,7 +22,7 @@ const Tweetbox = ({ setTweets }: Props) => {
     const [imageUrlBoxIsOpen, setImageUrlBoxIsOpen] = useState<boolean>(false);
 
     const imageInputRef = useRef<HTMLInputElement>(null);
-    // const { data: session } = useSession();
+    const { data: session } = useSession();
 
     const addImageTweet = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -37,10 +37,8 @@ const Tweetbox = ({ setTweets }: Props) => {
     const postTweet = async () => {
         const tweetBody: TweetBody = {
             text: input,
-            // username: session?.user?.name || 'Unknown User',
-            username: 'Unknown User',
-            // profileImage: session?.user?.image || 'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg',
-            profileImage: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg',
+            username: session?.user?.name?.split(" ").join("").toLocaleLowerCase() || 'Unknown User',
+            profileImage: session?.user?.image || 'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg',
             image: image
         }
 
@@ -74,12 +72,11 @@ const Tweetbox = ({ setTweets }: Props) => {
     
     return (
         <div className='flex space-x-2 p-5'>
-            {/* <img className="h-14 w-14 object-contain rounded-full mt-4" src={session?.user?.image || 'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg'} alt="profile-pic" /> */}
-            <img className="h-14 w-14 object-contain rounded-full mt-4" src={'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg'} alt="profile-pic" />
-
+            <img className="h-14 w-14 object-contain rounded-full mt-4" src={session?.user?.image || 'https://upload.wikimedia.org/wikipedia/commons/9/90/Marvel_Studios_logo.jpg'} alt="profile-pic" />
+ 
             <div className='flex flex-1 items-center pl-2'>
                 <form className='flex flex-1 flex-col'>
-                    <input className='h-24 w-full text-xl outline-none placeholder:text-xl' type='text' placeholder="What's Happening?" value={input} onChange={(e) => setInput(e.target.value)} />
+                    <input className='h-24 w-full text-xl outline-none placeholder:text-xl' type='text' placeholder="What's Happening? (Sign In to Post)" value={input} onChange={(e) => setInput(e.target.value)} />
                     <div className='flex items-center'>
                         <div className='flex space-x-2 text-twitter flex-1'>
                             {/* Icons */}
@@ -89,13 +86,12 @@ const Tweetbox = ({ setTweets }: Props) => {
                             <CalendarIcon className='h-5 w-5' />
                             <LocationMarkerIcon className='h-5 w-5' />
                         </div>
-                        {/* <button onClick={handleSubmit} disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Tweet</button> */}
-                        <button onClick={handleSubmit} disabled={!input} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Tweet</button>
+                        <button onClick={handleSubmit} disabled={!input || !session} className='bg-twitter px-5 py-2 font-bold text-white rounded-full disabled:opacity-40'>Tweet</button>
                     </div>
 
                     {imageUrlBoxIsOpen && (
                         <form className='mt-5 flex rounded-lg bg-twitter/80 py-2 px-4'>
-                            <input ref={imageInputRef} className='flex-1 bg-transparent p-2 text-white outline-none placeholder:text-white' type='text' placeholder='Enter Image URL'/>
+                            <input ref={imageInputRef} className='flex-1 bg-transparent p-2 text-white outline-none placeholder:text-white' type='text' placeholder='Enter Image URL (eg: https://picsum.photos/id/237/200/300)'/>
                             <button type='submit' onClick={addImageTweet} className='font-bold text-white'>Add Image</button>
                         </form>
                     )}

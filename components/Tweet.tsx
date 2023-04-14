@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/outline'
 import { fetchComments } from '../utils/fetchComments';
 import { useState, useEffect } from 'react'
-// import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 
 interface Props {
@@ -26,15 +26,13 @@ const Tweet = ({ tweet }: Props) => {
         setComments(comments);
     }
 
-    // const {data: session } = useSession()
+    const {data: session } = useSession()
 
     const postComment = async () => {
         const commentBody: CommentBody = {
             comment: input,
-            // username: session?.user?.name || "Unkown User",
-            username: "Unkown User",
-            // profileImg: session?.user?.image || 'https://picsum.photos/200/200',
-            profileImg: 'https://picsum.photos/200/200',
+            username: session?.user?.name || "Unkown User",
+            profileImg: session?.user?.image || 'https://picsum.photos/200/200',
             tweetId: tweet._id
         }
 
